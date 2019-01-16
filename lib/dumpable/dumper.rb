@@ -6,6 +6,7 @@ module Dumpable
       @dumpee = dumpee
       @options = Dumpable.config.merge(options || {})
       @id_padding = @options[:id_padding] || (@dumpee.class.respond_to?(:dumpable_options) && @dumpee.class.dumpable_options[:id_padding]) || Dumpable.config.id_padding
+      @id_padding = @id_padding.to_s
       @dumps = @options[:dumps] || (@dumpee.class.respond_to?(:dumpable_options) && @dumpee.class.dumpable_options[:dumps])
       @lines = []
     end
@@ -46,7 +47,7 @@ module Dumpable
         end
       elsif dumps.is_a?(Symbol) || dumps.is_a?(String)
         Array(object.send(dumps)).each do |child_object|
-          reflection = object.class.reflections[dumps.to_sym]
+          reflection = object.class.reflections[dumps.to_s]
           if reflection.macro == :belongs_to
             object.send("#{reflection.association_foreign_key}=", object.id + @id_padding)
           elsif [:has_many, :has_one].include? reflection.macro
