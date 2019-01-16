@@ -71,7 +71,7 @@ module Dumpable
       key_values = cloned_attributes.collect do |key,value|
         [key, dump_value_string(value)] unless skip_columns.include?(key.to_s)
       end.compact
-      keys = key_values.collect{ |item| "`#{item[0]}`" }.join(", ")
+      keys = key_values.collect{ |item| "#{item[0]}" }.join(", ")
       values = key_values.collect{ |item| item[1].to_s }.join(", ")
 
       "INSERT INTO #{object.class.table_name} (#{ keys }) VALUES (#{ values });"
